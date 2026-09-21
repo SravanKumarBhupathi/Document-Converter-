@@ -7,6 +7,13 @@ export type SupportedFormat =
   | 'txt'
   | 'html';
 
+export interface FileTypeDefinition {
+  format: SupportedFormat;
+  mime: string[];
+  extensions: string[];
+  icon: string;
+}
+
 export interface FileState {
   id: string;
   file: File;
@@ -32,6 +39,7 @@ export interface ConversionResult {
 export interface Converter {
   id: string;
   name: string;
+  description: string;
   from: SupportedFormat[];
   to: SupportedFormat[];
   convert: (
@@ -40,4 +48,14 @@ export interface Converter {
     options?: ConversionOptions,
     onProgress?: (progress: number) => void
   ) => Promise<ConversionResult>;
+}
+
+// History tracking
+export interface ConversionHistoryItem {
+  id: string;
+  originalName: string;
+  convertedName: string;
+  fromFormat: SupportedFormat;
+  toFormat: SupportedFormat;
+  date: number; // timestamp
 }

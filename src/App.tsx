@@ -1,28 +1,24 @@
 import { useState, useCallback, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { Footer } from './components/Footer';
 import { FileUpload } from './components/FileUpload';
-import { ConverterCard } from './components/ConverterCard';
 import { ConversionInterface } from './components/ConversionInterface';
 import { Toast, type ToastProps } from './components/Toast';
+import { ToolsDirectory } from './components/ToolsDirectory';
+import { HistorySidebar } from './components/HistorySidebar';
+import { useHistory } from './hooks/useHistory';
 import type { FileState, SupportedFormat } from './types';
-import { buildFormatMap, getConverter } from './converters';
-import { FileText, FileImage, Files, Image as ImageIcon } from 'lucide-react';
+import { buildFormatMap, getConverter, generateAcceptString, identifyFormat } from './converters';
+import { Menu, X, Zap } from 'lucide-react';
 
 function App() {
   const [files, setFiles] = useState<FileState[]>([]);
   const [toasts, setToasts] = useState<Omit<ToastProps, 'onClose'>[]>([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const { history, addToHistory, clearHistory } = useHistory();
 
   const formatMap = useMemo(() => buildFormatMap(), []);
-  const allAcceptedFormats = useMemo(() => {
-    const formats = new Set<string>();
-    Object.keys(formatMap).forEach(fmt => {
-      formats.add(`.${fmt}`);
-    });
-    return Array.from(formats);
-  }, [formatMap]);
+  const acceptString = useMemo(() => generateAcceptString(), []);
 
   const addToast = useCallback((type: ToastProps['type'], message: string) => {
     const id = uuidv4();
@@ -41,11 +37,6 @@ function App() {
     }));
 
     setFiles(prev => [...prev, ...newFileStates]);
-
-    // Smooth scroll to converter workspace
-    setTimeout(() => {
-      document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
   };
 
   const handleRemoveFile = (fileId: string) => {
@@ -56,7 +47,12 @@ function App() {
     const fileState = files.find(f => f.id === fileId);
     if (!fileState) return;
 
-    const fromExt = fileState.file.name.split('.').pop()?.toLowerCase() || '';
+    const fromExt = identifyFormat(fileState.file);
+    if (!fromExt) {
+      addToast('error', `Cannot identify format for ${fileState.file.name}`);
+      return;
+    }
+
     const converter = getConverter(fromExt, outputFormat);
 
     if (!converter) {
@@ -90,6 +86,7 @@ function App() {
         } : f
       ));
 
+      addToHistory(fileState.file.name, result.name, fromExt, outputFormat);
       addToast('success', `Successfully converted ${fileState.file.name}`);
     } catch (error) {
       console.error(error);
@@ -116,92 +113,151 @@ function App() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  };
 
-    addToast('success', `Downloaded ${fileState.convertedName}`);
+  const handleSelectTool = () => {
+    document.getElementById('workspace')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // In a full implementation, we might pre-select the output format here if only 1 file is selected
   };
 
   return (
-    <div id="top" className="flex flex-col min-h-screen bg-off-white">
-      <Header />
+    <div id="top" className="flex flex-col min-h-screen relative bg-bg-base">
 
-      <main className="flex-grow">
-        {files.length === 0 ? (
-          <>
-            <Hero />
-
-            {/* Quick Tools Section */}
-            <section id="tools" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4">Popular Tools</h2>
-                <p className="text-muted max-w-2xl mx-auto">Access our most used conversion tools directly. Everything runs right in your browser for maximum speed and privacy.</p>
+      {/* Header */}
+      <header className="border-b border-border-dark bg-bg-base/80 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({top:0, behavior:'smooth'})}>
+              <div className="bg-primary p-1.5 rounded-md shadow-[0_0_10px_rgba(255,106,0,0.4)]">
+                <Zap size={20} className="text-bg-base" fill="currentColor" />
               </div>
+              <span className="font-extrabold text-xl tracking-tight text-white">Radium<span className="text-primary">Convert</span></span>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <ConverterCard
-                  icon={<FileText size={24} />}
-                  title="DOCX to Text"
-                  description="Convert Word documents to clean text format."
-                  onClick={() => document.getElementById('upload-zone')?.scrollIntoView({ behavior: 'smooth' })}
-                />
-                <ConverterCard
-                  icon={<FileImage size={24} />}
-                  title="Image to PDF"
-                  description="Convert JPG, PNG, or WEBP images into a PDF document."
-                  onClick={() => document.getElementById('upload-zone')?.scrollIntoView({ behavior: 'smooth' })}
-                />
-                <ConverterCard
-                  icon={<ImageIcon size={24} />}
-                  title="JPG to PNG"
-                  description="Transform your images with transparent backgrounds."
-                  onClick={() => document.getElementById('upload-zone')?.scrollIntoView({ behavior: 'smooth' })}
-                />
-                <ConverterCard
-                  icon={<Files size={24} />}
-                  title="Word to Text"
-                  description="Extract pure text from DOCX documents."
-                  onClick={() => document.getElementById('upload-zone')?.scrollIntoView({ behavior: 'smooth' })}
-                />
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex space-x-8">
+              <a href="#workspace" className="text-text-secondary hover:text-white transition-colors font-medium text-sm">Workspace</a>
+              <a href="#tools" className="text-text-secondary hover:text-white transition-colors font-medium text-sm">All Tools</a>
+            </nav>
+
+            {/* Mobile menu button */}
+            <div className="flex items-center md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="text-text-secondary hover:text-white p-2"
+              >
+                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Nav */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-border-dark bg-bg-panel absolute w-full shadow-2xl">
+            <div className="px-4 py-4 space-y-2">
+              <a href="#workspace" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">Workspace</a>
+              <a href="#tools" onClick={() => setIsMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">All Tools</a>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Main Content Area */}
+      <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12 relative">
+
+        {/* Background Decorative elements */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+          {/* Main Converter Column */}
+          <div className="lg:col-span-8 xl:col-span-9 space-y-8">
+
+            <section className="space-y-4">
+              {files.length === 0 && (
+                <div className="mb-8">
+                  <h1 className="text-3xl md:text-4xl font-extrabold mb-3">
+                    Convert files. <span className="text-primary">Your way.</span>
+                  </h1>
+                  <p className="text-text-secondary text-lg max-w-xl leading-relaxed">
+                    A completely private, strictly client-side workspace for converting PDFs, Documents, and Images locally in your browser.
+                  </p>
+                </div>
+              )}
+
+              <div id="workspace" className="card shadow-[0_4px_30px_rgba(0,0,0,0.5)] border-border-light relative overflow-hidden group">
+                <div className="absolute inset-0 bg-grid opacity-50 pointer-events-none" />
+
+                <div className="relative z-10">
+                  {files.length === 0 ? (
+                    <FileUpload
+                      onFilesSelected={handleFilesSelected}
+                      acceptString={acceptString}
+                    />
+                  ) : (
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-center border-b border-border-dark pb-4">
+                        <h2 className="text-xl font-bold">Conversion Workspace</h2>
+                        <button
+                          onClick={() => setFiles([])}
+                          className="text-text-muted hover:text-text-primary text-sm font-medium transition-colors"
+                        >
+                          Clear All
+                        </button>
+                      </div>
+
+                      <ConversionInterface
+                        files={files}
+                        onConvert={handleConvert}
+                        onRemove={handleRemoveFile}
+                        onDownload={handleDownload}
+                        availableFormats={formatMap}
+                      />
+
+                      <div className="pt-4 mt-4 border-t border-border-dark">
+                        <FileUpload
+                          onFilesSelected={handleFilesSelected}
+                          acceptString={acceptString}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </section>
-          </>
-        ) : null}
 
-        {/* Main Workspace Area */}
-        <section
-          id={files.length === 0 ? "upload-zone" : "workspace"}
-          className={`py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto transition-all duration-500 ease-in-out ${files.length > 0 ? 'mt-8' : ''}`}
-        >
-          {files.length === 0 && (
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4">Start Converting</h2>
-              <p className="text-muted">Drop your files below to get started. Files are processed locally.</p>
+            <section id="tools" className="pt-12">
+              <ToolsDirectory onSelectTool={handleSelectTool} />
+            </section>
+
+          </div>
+
+          {/* Sidebar */}
+          <div className="lg:col-span-4 xl:col-span-3">
+            <div className="sticky top-24">
+              <HistorySidebar history={history} onClear={clearHistory} />
             </div>
-          )}
+          </div>
 
-          <FileUpload
-            onFilesSelected={handleFilesSelected}
-            acceptedFormats={allAcceptedFormats}
-          />
-
-          {files.length > 0 && (
-            <div className="mt-12 bg-white rounded-xl border-2 border-border p-6 sm:p-8 shadow-[8px_8px_0px_0px_rgba(17,17,17,1)]">
-              <ConversionInterface
-                files={files}
-                onConvert={handleConvert}
-                onRemove={handleRemoveFile}
-                onDownload={handleDownload}
-                availableFormats={formatMap}
-              />
-            </div>
-          )}
-        </section>
+        </div>
       </main>
 
-      <Footer />
+      <footer className="border-t border-border-dark bg-bg-panel mt-20 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-2">
+             <Zap size={16} className="text-primary" fill="currentColor" />
+             <span className="font-bold text-white tracking-tight">RadiumConvert</span>
+          </div>
+          <p className="text-text-muted text-sm font-medium">
+            Files are processed strictly locally in your browser.
+          </p>
+        </div>
+      </footer>
 
       {/* Toast Container */}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
-        <div className="pointer-events-auto">
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none">
+        <div className="pointer-events-auto w-full max-w-sm flex flex-col items-end">
           {toasts.map(toast => (
             <Toast
               key={toast.id}

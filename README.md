@@ -1,20 +1,24 @@
-# DocConvert
+# RadiumConvert
 
-A modern, fast, and secure document converter that runs entirely in your browser. Convert PDFs, images, documents, and text files without the hassle, with a clean and minimal interface.
+A professional, modern, and fast document converter built with a Radium-inspired futuristic utility aesthetic. RadiumConvert runs entirely in your browser, converting PDFs, documents, images, and text files locally without uploading your sensitive data to any server.
 
 ## Features
 
-- **Fully Client-Side**: All conversions happen locally in your browser. No files are uploaded to any server, ensuring complete privacy.
-- **Modern UI**: Designed with a sleek Orange, White, and Black theme using Tailwind CSS.
-- **Drag & Drop**: Easily add multiple files at once.
-- **Responsive**: Works flawlessly on desktop and mobile screens.
-- **Open Source Technologies**: Built using React, Vite, Tailwind CSS, `pdf-lib`, `pdfjs-dist`, and `mammoth`.
+- **Strictly Client-Side**: All file processing happens locally using browser APIs and Wasm/JS libraries. No backend, complete privacy.
+- **Radium Aesthetic**: High-contrast dark theme with utility-focused typography, black borders, and glowing orange accents.
+- **Robust File Handling**: The main file picker dynamically reads MIME types and extensions directly from the supported formats configuration, allowing you to correctly select PDF, DOCX, XLSX, TXT, and various image formats.
+- **Smart Conversion Engine**: The UI intelligently disables unsupported output formats based on the specific input file type.
+- **Tools Directory**: A filterable search interface allowing you to easily browse available conversion routes.
+- **Local History**: A lightweight history tracker powered by `localStorage` (doesn't save file contents).
+- **Responsive**: Fully optimized for mobile screens.
 
-## Supported Conversions
+## Supported File Processing
+
+Powered by a suite of robust open-source libraries (`pdf-lib`, `pdfjs-dist`, `mammoth`, `jspdf`):
 
 - **PDF**:
-  - Image to PDF (JPG, PNG, WEBP)
-  - PDF to Image (JPG, PNG, WEBP)
+  - Image to PDF
+  - PDF to Image
 - **Documents**:
   - DOCX to Text
   - DOCX to HTML
@@ -41,34 +45,16 @@ A modern, fast, and secure document converter that runs entirely in your browser
    npm run build
    npm run preview
    \`\`\`
-   (Or start the dev server via your package manager's standard commands).
 
 ## Testing
-
-To run the unit tests:
 
 \`\`\`bash
 npx vitest run
 \`\`\`
 
-## Production & Deployment
+## Deployment Constraints
 
-Since this application runs entirely client-side without a backend, it is straightforward to deploy to any static hosting provider.
-
-### Building for Production
-
-To create an optimized production build:
-
-\`\`\`bash
-npm run build
-\`\`\`
-This will output the compiled assets into the `dist` directory.
-
-### Deploying to GitHub Pages
-
-1. Ensure the `base` option in `vite.config.ts` is set to your repository name if not deploying to a custom domain (e.g., `base: '/my-repo/'`).
-2. Run the build step.
-3. Push the contents of the `dist` folder to your `gh-pages` branch.
+Because RadiumConvert operates completely on the client side without needing a backend environment (like Node, Docker, or external queue workers), it is highly compatible with **free static hosting providers**.
 
 ### Deploying to Render (Static Site)
 
@@ -77,8 +63,8 @@ This will output the compiled assets into the `dist` directory.
 3. Configure the following settings:
    - **Build Command**: `npm run build`
    - **Publish Directory**: `dist`
-4. Click "Create Static Site". Your converter will be live in minutes.
+4. Click "Create Static Site".
 
----
+### Deploying to GitHub Pages
 
-*Files are processed only for conversion and are not permanently stored.*
+Run `npm run build` and push the `dist` folder to your `gh-pages` branch. (Remember to configure the `base` in `vite.config.ts` if needed).

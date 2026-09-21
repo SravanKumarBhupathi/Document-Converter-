@@ -112,6 +112,7 @@ export const pdfToImage = async (
 export const pdfConverter: Converter = {
   id: 'pdf-converter',
   name: 'PDF Converter',
+  description: "Convert PDF files.",
   from: ['pdf', 'jpg', 'png', 'webp'],
   to: ['pdf', 'jpg', 'png', 'webp'],
   convert: async (file, toFormat, _options, onProgress) => {

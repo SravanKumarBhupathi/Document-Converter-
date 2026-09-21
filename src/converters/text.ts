@@ -30,6 +30,7 @@ export const textToPdf = async (file: File): Promise<ConversionResult> => {
 export const textConverter: Converter = {
   id: 'text-converter',
   name: 'Text Converter',
+  description: "Convert Text files.",
   from: ['txt'],
   to: ['pdf'],
   convert: async (file, toFormat, _options, onProgress) => {

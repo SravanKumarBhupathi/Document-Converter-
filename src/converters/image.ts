@@ -63,6 +63,7 @@ export const convertImage = async (
 export const imageConverter: Converter = {
   id: 'image-converter',
   name: 'Image Converter',
+  description: "Convert Image files.",
   from: ['jpg', 'png', 'webp'],
   to: ['jpg', 'png', 'webp'],
   convert: async (file, toFormat, options, onProgress) => {

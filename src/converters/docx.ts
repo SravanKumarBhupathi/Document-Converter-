@@ -44,6 +44,7 @@ ${result.value}
 export const docxConverter: Converter = {
   id: 'docx-converter',
   name: 'DOCX Converter',
+  description: "Convert DOCX files.",
   from: ['docx'],
   to: ['txt', 'html'],
   convert: async (file, toFormat, _options, onProgress) => {
