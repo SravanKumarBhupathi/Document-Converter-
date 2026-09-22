@@ -37,7 +37,6 @@ export const imageToPdf = async (file: File): Promise<ConversionResult> => {
   });
 
   const pdfBytes = await pdfDoc.save();
-  // Ensure we are passing a proper Uint8Array to Blob
   const blob = new Blob([new Uint8Array(pdfBytes).buffer as ArrayBuffer], { type: 'application/pdf' });
   const originalName = file.name.substring(0, file.name.lastIndexOf('.'));
 
@@ -72,8 +71,6 @@ export const pdfToImage = async (
   canvas.width = viewport.width;
   canvas.height = viewport.height;
 
-  // As of newer pdfjs-dist versions, some types require standard typing
-  // We'll cast to any for this specific options object to bypass TS strictness on canvas
   const renderContext: any = {
     canvasContext: ctx,
     viewport: viewport,
@@ -109,10 +106,75 @@ export const pdfToImage = async (
   });
 };
 
+export const splitPdfByRanges = async (file: File, ranges: string[]): Promise<ConversionResult[]> => {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const totalPages = pdfDoc.getPageCount();
+
+  const results: ConversionResult[] = [];
+  const originalName = file.name.substring(0, file.name.lastIndexOf('.'));
+
+  for (let i = 0; i < ranges.length; i++) {
+    const range = ranges[i].trim();
+    if (!range) continue;
+
+    let start = 1;
+    let end = 1;
+
+    if (range.includes('-')) {
+      const parts = range.split('-');
+      start = parseInt(parts[0]);
+      end = parseInt(parts[1]);
+    } else {
+      start = parseInt(range);
+      end = start;
+    }
+
+    if (isNaN(start) || isNaN(end) || start < 1 || end > totalPages || start > end) {
+      throw new Error(`Invalid range: ${range}. Document has ${totalPages} pages.`);
+    }
+
+    const newDoc = await PDFDocument.create();
+    const pageIndices = Array.from({ length: end - start + 1 }, (_, k) => start - 1 + k);
+
+    const copiedPages = await newDoc.copyPages(pdfDoc, pageIndices);
+    copiedPages.forEach(p => newDoc.addPage(p));
+
+    const pdfBytes = await newDoc.save();
+    const blob = new Blob([new Uint8Array(pdfBytes).buffer as ArrayBuffer], { type: 'application/pdf' });
+
+    results.push({
+      blob,
+      name: `${originalName}-split-${i + 1}.pdf`
+    });
+  }
+
+  return results;
+};
+
+export const mergePdfs = async (files: File[]): Promise<ConversionResult> => {
+  const mergedPdf = await PDFDocument.create();
+
+  for (const file of files) {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await PDFDocument.load(arrayBuffer);
+    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+    copiedPages.forEach((page) => mergedPdf.addPage(page));
+  }
+
+  const pdfBytes = await mergedPdf.save();
+  const blob = new Blob([new Uint8Array(pdfBytes).buffer as ArrayBuffer], { type: 'application/pdf' });
+
+  return {
+    blob,
+    name: `merged-${Date.now()}.pdf`
+  };
+};
+
 export const pdfConverter: Converter = {
   id: 'pdf-converter',
   name: 'PDF Converter',
-  description: "Convert PDF files.",
+  description: 'Convert PDF files.',
   from: ['pdf', 'jpg', 'png', 'webp'],
   to: ['pdf', 'jpg', 'png', 'webp'],
   convert: async (file, toFormat, _options, onProgress) => {
