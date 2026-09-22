@@ -27,9 +27,20 @@ export const Layout: React.FC = () => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
+  const getPageTitle = () => {
+    if (location.pathname === '/') return 'CONVERT';
+    if (location.pathname.startsWith('/tools')) return 'TOOLS';
+    if (location.pathname.startsWith('/calculators')) return 'CALCULATORS';
+    if (location.pathname.startsWith('/guides')) return 'GUIDES';
+    if (location.pathname.startsWith('/blog')) return 'BLOG';
+    return '';
+  };
+
+  const pageTitle = getPageTitle();
+
   return (
     <ToastContext.Provider value={{ addToast }}>
-      <div id="top" className="flex flex-col min-h-screen relative bg-bg-base">
+      <div id="top" className="flex flex-col min-h-screen relative bg-bg-base overflow-x-hidden">
 
         {/* Header */}
         <header className="border-b border-border-dark bg-bg-base/80 backdrop-blur-md sticky top-0 z-40">
@@ -47,6 +58,8 @@ export const Layout: React.FC = () => {
                 <Link to="/" className={`font-medium text-sm transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Convert</Link>
                 <Link to="/tools" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/tools') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Tools Directory</Link>
                 <Link to="/calculators" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/calculators') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Calculators</Link>
+                <Link to="/guides" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/guides') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Guides</Link>
+                <Link to="/blog" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/blog') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Blog</Link>
               </nav>
 
               {/* Mobile menu button */}
@@ -68,15 +81,31 @@ export const Layout: React.FC = () => {
                 <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">Convert</Link>
                 <Link to="/tools" className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">Tools Directory</Link>
                 <Link to="/calculators" className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">Calculators</Link>
+                <Link to="/guides" className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">Guides</Link>
+                <Link to="/blog" className="block px-3 py-2 rounded-md text-base font-medium text-text-primary hover:bg-bg-input">Blog</Link>
               </div>
             </div>
           )}
         </header>
 
+        {/* Page Title Indicator */}
+        {pageTitle && (
+          <div className="w-full border-b border-border-dark bg-bg-panel/30">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+              <div className="inline-block relative">
+                <span className="text-primary font-bold tracking-[0.2em] text-xs md:text-sm">
+                  {pageTitle}
+                </span>
+                <div className="absolute -bottom-[9px] left-0 w-full h-[2px] bg-white"></div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Main Content Area */}
-        <main className="flex-grow flex flex-col relative w-full">
+        <main className="flex-grow flex flex-col relative w-full overflow-x-hidden">
           {/* Global decorative background element */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] max-w-full bg-primary/5 rounded-full blur-[120px] pointer-events-none -z-10" />
 
           <Outlet />
         </main>
@@ -93,9 +122,11 @@ export const Layout: React.FC = () => {
               </p>
             </div>
 
-            <div className="flex gap-8 text-sm font-medium text-text-secondary">
+            <div className="flex flex-wrap justify-center gap-6 text-sm font-medium text-text-secondary">
               <Link to="/tools" className="hover:text-primary transition-colors">All Tools</Link>
               <Link to="/calculators" className="hover:text-primary transition-colors">Calculators</Link>
+              <Link to="/guides" className="hover:text-primary transition-colors">Guides</Link>
+              <Link to="/blog" className="hover:text-primary transition-colors">Blog</Link>
               <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-primary transition-colors">GitHub</a>
             </div>
           </div>
