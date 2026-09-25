@@ -77,16 +77,16 @@ export const Layout: React.FC = () => {
                 <div className="bg-primary p-1.5 rounded-md shadow-[0_0_10px_rgba(255,106,0,0.4)]">
                   <Zap size={20} className="text-bg-base" fill="currentColor" />
                 </div>
-                <span className="font-extrabold text-xl tracking-tight text-white">Radium<span className="text-primary">Convert</span></span>
+                <span className="font-extrabold text-xl tracking-tight text-text-primary">Radium<span className="text-primary">Convert</span></span>
               </Link>
 
               {/* Desktop Nav */}
               <nav className="hidden md:flex space-x-8">
-                <Link to="/" className={`font-medium text-sm transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Convert</Link>
-                <Link to="/tools" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/tools') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Tools Directory</Link>
-                <Link to="/calculators" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/calculators') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Calculators</Link>
-                <Link to="/guides" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/guides') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Guides</Link>
-                <Link to="/blog" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/blog') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Blog</Link>
+                <Link to="/" className={`font-medium text-sm transition-colors ${location.pathname === '/' ? 'text-primary' : 'text-text-secondary hover:text-text-primary'}`}>Convert</Link>
+                <Link to="/tools" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/tools') ? 'text-primary' : 'text-text-secondary hover:text-text-primary'}`}>Tools Directory</Link>
+                <Link to="/calculators" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/calculators') ? 'text-primary' : 'text-text-secondary hover:text-text-primary'}`}>Calculators</Link>
+                <Link to="/guides" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/guides') ? 'text-primary' : 'text-text-secondary hover:text-text-primary'}`}>Guides</Link>
+                <Link to="/blog" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/blog') ? 'text-primary' : 'text-text-secondary hover:text-text-primary'}`}>Blog</Link>
               </nav>
 
               {/* Theme Toggle Desktop */}
@@ -111,7 +111,7 @@ export const Layout: React.FC = () => {
                 </button>
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="text-text-secondary hover:text-white p-2 focus:outline-none"
+                  className="text-text-secondary hover:text-text-primary p-2 focus:outline-none"
                 >
                   {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
@@ -160,7 +160,7 @@ export const Layout: React.FC = () => {
             <div className="flex flex-col items-center md:items-start gap-2">
               <div className="flex items-center gap-2">
                 <Zap size={16} className="text-primary" fill="currentColor" />
-                <span className="font-bold text-white tracking-tight">RadiumConvert</span>
+                <span className="font-bold text-text-primary tracking-tight">RadiumConvert</span>
               </div>
               <p className="text-text-muted text-sm font-medium text-center md:text-left max-w-sm">
                 Files are processed strictly locally in your browser. They never leave your device.

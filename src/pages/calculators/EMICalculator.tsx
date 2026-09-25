@@ -50,7 +50,7 @@ export const EMICalculator: React.FC = () => {
               type="number"
               value={principal}
               onChange={(e) => setPrincipal(e.target.value)}
-              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-white outline-none focus:border-primary"
+              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-text-primary outline-none focus:border-primary"
             />
           </div>
 
@@ -60,7 +60,7 @@ export const EMICalculator: React.FC = () => {
               type="number"
               value={rate}
               onChange={(e) => setRate(e.target.value)}
-              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-white outline-none focus:border-primary"
+              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-text-primary outline-none focus:border-primary"
             />
           </div>
 
@@ -70,7 +70,7 @@ export const EMICalculator: React.FC = () => {
               type="number"
               value={tenure}
               onChange={(e) => setTenure(e.target.value)}
-              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-white outline-none focus:border-primary"
+              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-text-primary outline-none focus:border-primary"
             />
           </div>
 
@@ -92,11 +92,11 @@ export const EMICalculator: React.FC = () => {
             <div className="grid grid-cols-2 gap-4 mt-4 pt-6 border-t border-border-dark text-center">
               <div>
                 <p className="text-text-muted text-xs uppercase tracking-wider mb-1">Total Interest</p>
-                <p className="font-bold text-lg text-white">${result.totalInterest}</p>
+                <p className="font-bold text-lg text-text-primary">${result.totalInterest}</p>
               </div>
               <div>
                 <p className="text-text-muted text-xs uppercase tracking-wider mb-1">Total Payment</p>
-                <p className="font-bold text-lg text-white">${result.totalPayment}</p>
+                <p className="font-bold text-lg text-text-primary">${result.totalPayment}</p>
               </div>
             </div>
           </div>

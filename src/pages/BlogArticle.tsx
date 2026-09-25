@@ -38,11 +38,11 @@ export const BlogArticle: React.FC = () => {
               </>
             )}
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">{post.title}</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight">{post.title}</h1>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-border-light flex items-center justify-center font-bold text-text-muted">RC</div>
             <div>
-              <p className="font-semibold text-white text-sm">RadiumConvert Team</p>
+              <p className="font-semibold text-text-primary text-sm">RadiumConvert Team</p>
               <p className="text-xs text-text-muted">Editorial</p>
             </div>
           </div>
@@ -54,7 +54,7 @@ export const BlogArticle: React.FC = () => {
         {/* Example of related tool CTA logic if specified */}
         {post.relatedToolRoute && (
           <div className="p-6 my-8 border-l-4 border-primary bg-bg-input rounded-r-lg mt-12">
-             <h4 className="text-white font-bold mb-2 flex items-center gap-2">
+             <h4 className="text-text-primary font-bold mb-2 flex items-center gap-2">
                <GraduationCap className="text-primary" size={20} />
                Related Tool
              </h4>
@@ -66,7 +66,7 @@ export const BlogArticle: React.FC = () => {
 
         {/* Related Content CTA */}
         <div className="mt-16 pt-8 border-t border-border-dark flex justify-between items-center">
-          <Link to="/blog" className="text-text-muted hover:text-white font-medium flex items-center gap-2 transition-colors">
+          <Link to="/blog" className="text-text-muted hover:text-text-primary font-medium flex items-center gap-2 transition-colors">
             ← Back to Blog
           </Link>
           <Link to="/tools" className="text-primary hover:text-primary-hover font-semibold flex items-center gap-2 transition-colors">

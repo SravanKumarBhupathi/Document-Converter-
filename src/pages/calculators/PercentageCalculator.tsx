@@ -42,7 +42,7 @@ export const PercentageCalculator: React.FC = () => {
                 value={val1}
                 onChange={(e) => setVal1(e.target.value)}
                 placeholder="20"
-                className="w-full bg-bg-input border border-border-dark rounded-lg pl-4 pr-8 py-3 text-white outline-none focus:border-primary"
+                className="w-full bg-bg-input border border-border-dark rounded-lg pl-4 pr-8 py-3 text-text-primary outline-none focus:border-primary"
               />
               <span className="absolute right-3 top-3 text-text-muted font-bold">%</span>
             </div>
@@ -57,7 +57,7 @@ export const PercentageCalculator: React.FC = () => {
               value={val2}
               onChange={(e) => setVal2(e.target.value)}
               placeholder="150"
-              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-white outline-none focus:border-primary"
+              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-text-primary outline-none focus:border-primary"
             />
           </div>
         </div>

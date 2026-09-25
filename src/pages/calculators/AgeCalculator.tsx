@@ -60,7 +60,7 @@ export const AgeCalculator: React.FC = () => {
               type="date"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
-              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-white outline-none focus:border-primary"
+              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-text-primary outline-none focus:border-primary"
             />
           </div>
 
@@ -70,7 +70,7 @@ export const AgeCalculator: React.FC = () => {
               type="date"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-white outline-none focus:border-primary"
+              className="w-full bg-bg-input border border-border-dark rounded-lg px-4 py-3 text-text-primary outline-none focus:border-primary"
             />
           </div>
         </div>
@@ -91,11 +91,11 @@ export const AgeCalculator: React.FC = () => {
                 <p className="text-text-muted uppercase text-xs font-bold mt-1 tracking-wider">Years</p>
               </div>
               <div>
-                <p className="text-5xl font-extrabold text-white">{result.months}</p>
+                <p className="text-5xl font-extrabold text-text-primary">{result.months}</p>
                 <p className="text-text-muted uppercase text-xs font-bold mt-1 tracking-wider">Months</p>
               </div>
               <div>
-                <p className="text-5xl font-extrabold text-white">{result.days}</p>
+                <p className="text-5xl font-extrabold text-text-primary">{result.days}</p>
                 <p className="text-text-muted uppercase text-xs font-bold mt-1 tracking-wider">Days</p>
               </div>
             </div>

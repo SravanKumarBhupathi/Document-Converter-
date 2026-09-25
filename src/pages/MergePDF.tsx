@@ -88,10 +88,10 @@ export const MergePDF: React.FC = () => {
                     <span className="font-semibold truncate text-sm">{f.name}</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    <button onClick={() => moveFile(idx, 'up')} disabled={idx === 0} className="p-1 hover:text-white disabled:opacity-30">
+                    <button onClick={() => moveFile(idx, 'up')} disabled={idx === 0} className="p-1 hover:text-text-primary disabled:opacity-30">
                       <ArrowUp size={16} />
                     </button>
-                    <button onClick={() => moveFile(idx, 'down')} disabled={idx === files.length - 1} className="p-1 hover:text-white disabled:opacity-30">
+                    <button onClick={() => moveFile(idx, 'down')} disabled={idx === files.length - 1} className="p-1 hover:text-text-primary disabled:opacity-30">
                       <ArrowDown size={16} />
                     </button>
                     <div className="w-px h-4 bg-border-dark mx-1"></div>
