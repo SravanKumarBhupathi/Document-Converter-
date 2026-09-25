@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { Menu, X, Zap } from 'lucide-react';
+import { Menu, X, Zap, Sun, Moon } from 'lucide-react';
 import { Toast, type ToastProps } from './Toast';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -10,6 +10,7 @@ export const ToastContext = React.createContext<{
 
 export const Layout: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [toasts, setToasts] = useState<Omit<ToastProps, 'onClose'>[]>([]);
   const location = useLocation();
 
@@ -23,6 +24,31 @@ export const Layout: React.FC = () => {
   };
 
   // Close mobile menu and scroll to top on route change
+  React.useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.style.setProperty('--color-bg-base', '#080808');
+      root.style.setProperty('--color-bg-panel', '#111111');
+      root.style.setProperty('--color-bg-card', '#171717');
+      root.style.setProperty('--color-bg-input', '#1A1A1A');
+      root.style.setProperty('--color-text-primary', '#FFFFFF');
+      root.style.setProperty('--color-text-secondary', '#A8A8A8');
+      root.style.setProperty('--color-border-dark', '#262626');
+      root.style.setProperty('--color-border-light', '#333333');
+    } else {
+      root.classList.remove('dark');
+      root.style.setProperty('--color-bg-base', '#F9FAFB');
+      root.style.setProperty('--color-bg-panel', '#FFFFFF');
+      root.style.setProperty('--color-bg-card', '#FFFFFF');
+      root.style.setProperty('--color-bg-input', '#F3F4F6');
+      root.style.setProperty('--color-text-primary', '#111827');
+      root.style.setProperty('--color-text-secondary', '#4B5563');
+      root.style.setProperty('--color-border-dark', '#E5E7EB');
+      root.style.setProperty('--color-border-light', '#D1D5DB');
+    }
+  }, [theme]);
+
   React.useEffect(() => {
     setIsMobileMenuOpen(false);
     window.scrollTo(0, 0);
@@ -63,8 +89,26 @@ export const Layout: React.FC = () => {
                 <Link to="/blog" className={`font-medium text-sm transition-colors ${location.pathname.startsWith('/blog') ? 'text-primary' : 'text-text-secondary hover:text-white'}`}>Blog</Link>
               </nav>
 
+              {/* Theme Toggle Desktop */}
+              <div className="hidden md:flex items-center ml-4 border-l border-border-dark pl-4">
+                <button
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  className="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-input transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label="Toggle Dark Mode"
+                >
+                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
+              </div>
+
               {/* Mobile menu button */}
-              <div className="flex items-center md:hidden">
+              <div className="flex items-center md:hidden gap-2">
+                <button
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  className="p-2 rounded-lg text-text-secondary hover:text-text-primary hover:bg-bg-input transition-colors focus:outline-none"
+                  aria-label="Toggle Dark Mode"
+                >
+                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   className="text-text-secondary hover:text-white p-2 focus:outline-none"

@@ -143,7 +143,7 @@ export const SplitPDF: React.FC = () => {
 
               <div className="space-y-3 pt-4">
                 {results.map((res, idx) => (
-                  <div key={idx} className="flex justify-between items-center bg-bg-input p-3 rounded-lg border border-border-dark">
+                  <div key={idx} className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-bg-input p-3 rounded-lg border border-border-dark gap-3 sm:gap-0">
                     <span className="font-semibold text-sm">{res.name}</span>
                     <button onClick={() => downloadFile(res)} className="btn-secondary py-1.5 text-sm flex items-center gap-2">
                       <Download size={14} /> Download

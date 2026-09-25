@@ -126,7 +126,7 @@ export const MergePDF: React.FC = () => {
             <h3 className="text-lg font-bold text-success flex items-center gap-2">Success!</h3>
             <p className="text-text-secondary">Your PDFs have been successfully merged.</p>
 
-            <div className="flex justify-between items-center bg-bg-input p-4 rounded-lg border border-border-dark mt-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-bg-input p-4 rounded-lg border border-border-dark mt-4 gap-4 sm:gap-0">
               <div className="flex items-center gap-3">
                 <FileText className="text-primary" />
                 <span className="font-semibold">{result.name}</span>
