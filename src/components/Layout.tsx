@@ -141,7 +141,7 @@ export const Layout: React.FC = () => {
                 <span className="text-primary font-bold tracking-[0.2em] text-xs md:text-sm">
                   {pageTitle}
                 </span>
-                <div className="absolute -bottom-[9px] left-0 w-full h-[2px] bg-white"></div>
+                <div className="absolute -bottom-[9px] left-0 w-full h-[2px] bg-text-primary"></div>
               </div>
             </div>
           </div>
