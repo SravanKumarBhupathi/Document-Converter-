@@ -2,15 +2,9 @@ import React from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { BookOpen } from 'lucide-react';
 import { ContentCard } from '../components/CategoryCards';
+import { GUIDES } from '../data/content';
 
 export const GuidesHub: React.FC = () => {
-  const guides = [
-    { title: "How to Merge PDFs", description: "Learn how to combine multiple PDF documents into a single file easily and securely.", category: "PDF Basics", route: "/guides/merge-pdfs", readTime: "3 min read", type: "guide" as const },
-    { title: "How to Compress Images without Losing Quality", description: "Discover the best techniques to reduce image file sizes for the web while maintaining visual fidelity.", category: "Image Optimization", route: "/guides/compress-images", readTime: "5 min read", type: "guide" as const },
-    { title: "Calculating Percentages: A Complete Guide", description: "A quick refresher on calculating percentages, increases, decreases, and differences.", category: "Math & Finance", route: "/guides/calculate-percentage", readTime: "4 min read", type: "guide" as const },
-    { title: "Converting PDF to Word Documents", description: "Step-by-step instructions on extracting text and structure from PDFs into editable DOCX files.", category: "Document Workflows", route: "/guides/pdf-to-word", readTime: "4 min read", type: "guide" as const },
-  ];
-
   return (
     <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 md:py-12">
       <Breadcrumbs />
@@ -26,8 +20,16 @@ export const GuidesHub: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {guides.map((guide, idx) => (
-          <ContentCard key={idx} {...guide} />
+        {GUIDES.map((guide) => (
+          <ContentCard
+            key={guide.id}
+            title={guide.title}
+            description={guide.description}
+            category={guide.category}
+            route={`/guides/${guide.slug}`}
+            readTime={guide.readTime}
+            type={guide.type}
+          />
         ))}
       </div>
     </div>

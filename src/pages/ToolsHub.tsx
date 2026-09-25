@@ -3,9 +3,10 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { CategoryCard } from '../components/CategoryCards';
 import { FileText, Image as ImageIcon, Type, Code, GraduationCap } from 'lucide-react';
 import { ToolsDirectory } from '../components/ToolsDirectory';
+import { TOOLS_REGISTRY } from '../registry';
 
 export const ToolsHub: React.FC = () => {
-
+  const getCount = (category: string) => TOOLS_REGISTRY.filter(t => t.category === category).length;
 
   const categories = [
     {
@@ -13,21 +14,21 @@ export const ToolsHub: React.FC = () => {
       title: "PDF Tools",
       description: "Convert, merge, split, compress and organize PDF files.",
       route: "/tools/pdf-tools",
-      count: 4
+      count: getCount("PDF Tools")
     },
     {
       icon: <ImageIcon className="text-primary" size={24} />,
       title: "Image Tools",
       description: "Resize, compress, convert, crop and optimize images.",
       route: "/tools/image-tools",
-      count: 2
+      count: getCount("Image Tools")
     },
     {
       icon: <Type className="text-primary" size={24} />,
       title: "Text Tools",
       description: "Format, clean, transform and analyze text.",
       route: "/tools/text-tools",
-      count: 1
+      count: getCount("Document Tools") // Using Document Tools for now as Text isn't fully separated
     },
     {
       icon: <Code className="text-primary" size={24} />,

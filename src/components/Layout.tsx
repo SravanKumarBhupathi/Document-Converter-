@@ -22,9 +22,10 @@ export const Layout: React.FC = () => {
     setToasts(prev => prev.filter(t => t.id !== id));
   };
 
-  // Close mobile menu on route change
+  // Close mobile menu and scroll to top on route change
   React.useEffect(() => {
     setIsMobileMenuOpen(false);
+    window.scrollTo(0, 0);
   }, [location.pathname]);
 
   const getPageTitle = () => {
