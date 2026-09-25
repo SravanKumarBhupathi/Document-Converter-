@@ -54,7 +54,7 @@ export const Toast: React.FC<ToastProps> = ({
       </div>
       <button
         onClick={() => onClose(id)}
-        className="ml-auto -mx-1.5 -my-1.5 bg-transparent text-text-muted hover:text-text-primary rounded-lg p-1.5 hover:bg-bg-input inline-flex h-8 w-8 transition-colors"
+        className="ml-auto -mx-1.5 -my-1.5 bg-transparent text-text-muted hover:text-white rounded-lg p-1.5 hover:bg-bg-input inline-flex h-8 w-8 transition-colors"
         aria-label="Close"
       >
         <span className="sr-only">Close</span>

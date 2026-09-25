@@ -36,7 +36,7 @@ export const GuideArticle: React.FC = () => {
               </>
             )}
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-text-primary mb-6 leading-tight">{guide.title}</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">{guide.title}</h1>
           <p className="text-xl text-text-secondary">{guide.description}</p>
         </header>
 
@@ -49,7 +49,7 @@ export const GuideArticle: React.FC = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
             <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
               <div>
-                <h3 className="text-2xl font-bold text-text-primary mb-2 flex items-center gap-3">
+                <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-3">
                   Ready to put this guide into action?
                 </h3>
                 <p className="text-text-secondary">Use our tool securely and instantly directly in your browser.</p>

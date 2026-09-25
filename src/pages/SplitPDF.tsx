@@ -101,7 +101,7 @@ export const SplitPDF: React.FC = () => {
                   max="20"
                   value={numSplits}
                   onChange={handleNumSplitsChange}
-                  className="bg-bg-base border border-border-dark rounded-lg px-4 py-2 text-text-primary outline-none focus:border-primary w-32"
+                  className="bg-bg-base border border-border-dark rounded-lg px-4 py-2 text-white outline-none focus:border-primary w-32"
                 />
               </div>
 
@@ -114,7 +114,7 @@ export const SplitPDF: React.FC = () => {
                       value={range}
                       onChange={(e) => updateRange(idx, e.target.value)}
                       placeholder="1-5"
-                      className="bg-bg-base border border-border-dark rounded-lg px-4 py-2 text-text-primary outline-none focus:border-primary w-full max-w-sm"
+                      className="bg-bg-base border border-border-dark rounded-lg px-4 py-2 text-white outline-none focus:border-primary w-full max-w-sm"
                     />
                   </div>
                 ))}
