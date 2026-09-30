@@ -155,10 +155,15 @@ export const splitPdfByRanges = async (file: File, ranges: string[]): Promise<Co
 export const mergePdfs = async (files: File[]): Promise<ConversionResult> => {
   const mergedPdf = await PDFDocument.create();
 
-  for (const file of files) {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await PDFDocument.load(arrayBuffer);
-    const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+  const copiedPagesArrays = await Promise.all(
+    files.map(async (file) => {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await PDFDocument.load(arrayBuffer);
+      return await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+    })
+  );
+
+  for (const copiedPages of copiedPagesArrays) {
     copiedPages.forEach((page) => mergedPdf.addPage(page));
   }
 
