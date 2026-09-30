@@ -3,6 +3,7 @@ import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { Combine } from 'lucide-react';
 import { getGuideBySlug } from '../data/content';
+import DOMPurify from 'dompurify';
 
 export const GuideArticle: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -41,7 +42,7 @@ export const GuideArticle: React.FC = () => {
         </header>
 
         {/* Dynamic content rendering from CMS string */}
-        <div className="text-text-primary space-y-6 leading-relaxed text-lg content-html" dangerouslySetInnerHTML={{ __html: guide.content }} />
+        <div className="text-text-primary space-y-6 leading-relaxed text-lg content-html" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(guide.content) }} />
 
         {/* Inline Tool CTA */}
         {guide.relatedToolRoute && (
