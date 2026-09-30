@@ -68,8 +68,6 @@ export const imageConverter: Converter = {
   to: ['jpg', 'png', 'webp'],
   convert: async (file, toFormat, options, onProgress) => {
     if (onProgress) onProgress(10);
-    // Add artificial small delay to show progress state
-    await new Promise(r => setTimeout(r, 100));
     if (onProgress) onProgress(50);
     const result = await convertImage(file, toFormat, options?.quality);
     if (onProgress) onProgress(100);
