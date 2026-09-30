@@ -2,6 +2,7 @@ import React from 'react';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { GraduationCap, ArrowRight } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import { getBlogPostBySlug } from '../data/content';
 
 export const BlogArticle: React.FC = () => {
@@ -49,7 +50,7 @@ export const BlogArticle: React.FC = () => {
         </header>
 
         {/* Dynamic content rendering from CMS string */}
-        <div className="text-text-primary space-y-6 leading-relaxed text-lg content-html" dangerouslySetInnerHTML={{ __html: post.content }} />
+        <div className="text-text-primary space-y-6 leading-relaxed text-lg content-html" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }} />
 
         {/* Example of related tool CTA logic if specified */}
         {post.relatedToolRoute && (
