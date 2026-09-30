@@ -7,49 +7,45 @@ interface ToolsDirectoryProps {
   onSelectTool: (from: SupportedFormat, to: SupportedFormat) => void;
 }
 
+const AVAILABLE_TOOLS: { from: SupportedFormat, to: SupportedFormat, name: string, category: string }[] = [];
+
+converters.forEach(converter => {
+  converter.from.forEach(fromFmt => {
+    converter.to.forEach(toFmt => {
+      if (fromFmt === toFmt) return; // Skip same-format identity converters
+
+      let category = 'Other';
+      if (fromFmt === 'pdf' || toFmt === 'pdf') category = 'PDF Tools';
+      else if (['jpg', 'png', 'webp'].includes(fromFmt)) category = 'Image Tools';
+      else if (['docx', 'txt', 'html'].includes(fromFmt)) category = 'Document Tools';
+
+      AVAILABLE_TOOLS.push({
+        from: fromFmt,
+        to: toFmt,
+        name: `${fromFmt.toUpperCase()} to ${toFmt.toUpperCase()}`,
+        category
+      });
+    });
+  });
+});
+
 export const ToolsDirectory: React.FC<ToolsDirectoryProps> = ({ onSelectTool }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
-  const tools = useMemo(() => {
-    const list: { from: SupportedFormat, to: SupportedFormat, name: string, category: string }[] = [];
-
-    converters.forEach(converter => {
-      converter.from.forEach(fromFmt => {
-        converter.to.forEach(toFmt => {
-          if (fromFmt === toFmt) return; // Skip same-format identity converters
-
-          let category = 'Other';
-          if (fromFmt === 'pdf' || toFmt === 'pdf') category = 'PDF Tools';
-          else if (['jpg', 'png', 'webp'].includes(fromFmt)) category = 'Image Tools';
-          else if (['docx', 'txt', 'html'].includes(fromFmt)) category = 'Document Tools';
-
-          list.push({
-            from: fromFmt,
-            to: toFmt,
-            name: `${fromFmt.toUpperCase()} to ${toFmt.toUpperCase()}`,
-            category
-          });
-        });
-      });
-    });
-
-    return list;
-  }, []);
-
   const filteredTools = useMemo(() => {
-    if (!searchQuery.trim()) return tools;
+    if (!searchQuery.trim()) return AVAILABLE_TOOLS;
     const q = searchQuery.toLowerCase();
-    return tools.filter(t =>
+    return AVAILABLE_TOOLS.filter(t =>
       t.name.toLowerCase().includes(q) ||
       t.category.toLowerCase().includes(q) ||
       t.from.toLowerCase().includes(q) ||
       t.to.toLowerCase().includes(q)
     );
-  }, [tools, searchQuery]);
+  }, [searchQuery]);
 
   // Group by category
   const groupedTools = useMemo(() => {
-    const groups: Record<string, typeof tools> = {};
+    const groups: Record<string, typeof AVAILABLE_TOOLS> = {};
     filteredTools.forEach(t => {
       if (!groups[t.category]) groups[t.category] = [];
       groups[t.category].push(t);
